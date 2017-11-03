@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "name": "evacuate-unnecessary-bookmarks",
+  "version": "1.0",
+  "description": "不要になったブックマークを退避するWebExtension",
+  "homepage_url": "https://github.com/wild7/evacuate-unnecessary-bookmarks",
+  "icons": {
+    "48": "icons/evacuate-unnecessary-bookmarks-48"
+  },
+
+  "permissions": [
+    "alarms"
+  ],
+
+  "page_action": {
+    "default_icon": "icons/evacuate-unnecessary-bookmarks-32.png",
+    "default_title": "evacuate-unnecessary-bookmarks"
+  },
+
+  "background": {
+    "scripts": ["background.js"]
+  }
+}
