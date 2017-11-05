@@ -5,15 +5,14 @@
   "description": "不要になったブックマークを退避するWebExtension",
   "homepage_url": "https://github.com/wild7/evacuate-unnecessary-bookmarks",
   "icons": {
-    "48": "icons/evacuate-unnecessary-bookmarks-48"
   },
 
   "permissions": [
-    "alarms"
+    "alarms",
+    "bookmarks"
   ],
 
   "page_action": {
-    "default_icon": "icons/evacuate-unnecessary-bookmarks-32.png",
     "default_title": "evacuate-unnecessary-bookmarks"
   },
 
