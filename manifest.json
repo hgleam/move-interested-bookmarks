@@ -9,7 +9,8 @@
 
   "permissions": [
     "alarms",
-    "bookmarks"
+    "bookmarks",
+    "history"
   ],
 
   "page_action": {
