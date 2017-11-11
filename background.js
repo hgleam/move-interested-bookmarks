@@ -2,38 +2,77 @@ var DELAY = 0.1;
 
 // ブックマーク走査
 class BookmarkTracer {
-  constructor() {
+  constructor()
+  {
     this.name = 'ExtendBookmarks';
   }
 
   // ブックマークツリーを走査
-  traceTree(bookmarkItems) {
+  traceTree(bookmarkItems)
+  {
     this.traceItems(bookmarkItems[0], 0);
   };
 
   // ブックマークアイテムを走査
   traceItems(bookmarkItem, indent)
   {
-    if (bookmarkItem.children) {
-      this.displayLog(bookmarkItem, indent);
-      indent++;
-      for (let childlen of bookmarkItem.children) {
-        this.traceItems(childlen, indent);
+    return new Promise((resolve, reject) => {
+      if (bookmarkItem.title != '') {
+        var searching = browser.history.search(this.createLogSearchCriteria(bookmarkItem));
+        searching.then(this.haveGot)
+        .then(function(lastVisitTime) {
+          bookmarkItem.lastVisitTime = lastVisitTime;
+          resolve(bookmarkItem);
+        });
       }
-    } else {
+      if (bookmarkItem.children) {
+        if (bookmarkItem.title) indent++;
+        for (let childlen of bookmarkItem.children) {
+          this.traceItems(childlen, indent);
+        }
+        indent--;
+      }
+    }).then((bookmarkItem) => {
       this.displayLog(bookmarkItem, indent);
+    });
+  };
+
+  // 履歴検索条件の生成
+  // URLを持っている場合はURLを条件、持っていない場合はタイトルを条件とする
+  createLogSearchCriteria(bookmarkItem)
+  {
+    var text = bookmarkItem.url;
+    if (text == undefined) text = bookmarkItem.title;
+    return {
+      text: text,
+      startTime: 0
+    };
+  }
+
+  // 履歴の取得
+  haveGot(historyItems)
+  {
+    for (let item of historyItems) {
+      return new Date(item.lastVisitTime);
     }
-    indent--;
   }
 
   // ログを表示
-  displayLog(bookmarkItem, indent) {
-    console.log(this.appendIndent(indent) + bookmarkItem.title);
+  displayLog(bookmarkItem, indent)
+  {
+    if (bookmarkItem.title != '') {
+      if (bookmarkItem.lastVisitTime == undefined) {
+        console.log(this.appendIndent(indent) + ">" + bookmarkItem.title);
+      } else {
+        console.log(this.appendIndent(indent) + ">" + bookmarkItem.title + "" + bookmarkItem.lastVisitTime);
+      }
+    }
   }
 
   // インデントを追加
-  appendIndent(indentLength) {
-    return " ".repeat(indentLength) + ">";
+  appendIndent(indentLength)
+  {
+    return " ".repeat(indentLength);
   }
 }
 
