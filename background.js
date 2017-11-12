@@ -1,4 +1,6 @@
 var DELAY = 0.1;
+var googleBookmarkId = 'PwWA72FeNmtS';  // googleホームページのブックマークID
+var savingFolderId = 'SY7AkDMjYZ7V';    // 退避先のフォルダID
 
 // ブックマーク走査
 class BookmarkTracer {
@@ -24,6 +26,10 @@ class BookmarkTracer {
           bookmarkItem.lastVisitTime = lastVisitTime;
           resolve(bookmarkItem);
         });
+      }
+      // 決めうちでGoogleブックマークが退避できるかテスト
+      if (bookmarkItem.id == googleBookmarkId) {
+        var movingBookmark = browser.bookmarks.move(bookmarkItem.id, {parentId: savingFolderId})
       }
       if (bookmarkItem.children) {
         if (bookmarkItem.title) indent++;
@@ -64,7 +70,7 @@ class BookmarkTracer {
       if (bookmarkItem.lastVisitTime == undefined) {
         console.log(this.appendIndent(indent) + ">" + bookmarkItem.title);
       } else {
-        console.log(this.appendIndent(indent) + ">" + bookmarkItem.title + "" + bookmarkItem.lastVisitTime);
+        console.log(this.appendIndent(indent) + ">" + bookmarkItem.title + " " + bookmarkItem.lastVisitTime + " " + bookmarkItem.id);
       }
     }
   }
