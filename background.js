@@ -89,7 +89,8 @@ function createAlarm()
 {
   console.log("createAlarm");
   browser.alarms.clearAll();
-  browser.alarms.create("", {delayInMinutes: DELAY});
+  var millisecond = Date.parse("2017-11-14 07:13:00")
+  browser.alarms.create("", {when: millisecond});
 }
 
 // アラーム動作
