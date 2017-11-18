@@ -1,6 +1,6 @@
 var DELAY = 0.1;
-var googleBookmarkId = 'PwWA72FeNmtS';  // googleホームページのブックマークID
 var savingFolderId = 'SY7AkDMjYZ7V';    // 退避先のフォルダID
+var monthAgo = 2;                       // 退避対象ブックマークを2ヶ月未読のものと決めうちで確認
 
 // ブックマーク走査
 class BookmarkTracer {
@@ -27,10 +27,7 @@ class BookmarkTracer {
           resolve(bookmarkItem);
         });
       }
-      // 決めうちでGoogleブックマークが退避できるかテスト
-      if (bookmarkItem.id == googleBookmarkId) {
-        var movingBookmark = browser.bookmarks.move(bookmarkItem.id, {parentId: savingFolderId})
-      }
+
       if (bookmarkItem.children) {
         if (bookmarkItem.title) indent++;
         for (let childlen of bookmarkItem.children) {
@@ -39,6 +36,9 @@ class BookmarkTracer {
         indent--;
       }
     }).then((bookmarkItem) => {
+      if (this.isMoveTarget(bookmarkItem)) {
+        var movingBookmark = browser.bookmarks.move(bookmarkItem.id, {parentId: savingFolderId})
+      }
       this.displayLog(bookmarkItem, indent);
     });
   };
@@ -47,10 +47,11 @@ class BookmarkTracer {
   // URLを持っている場合はURLを条件、持っていない場合はタイトルを条件とする
   createLogSearchCriteria(bookmarkItem)
   {
-    var text = bookmarkItem.url;
-    if (text == undefined) text = bookmarkItem.title;
+    var domainName = bookmarkItem.url == undefined
+                   ? bookmarkItem.title
+                   : bookmarkItem.url.match(/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/i)[4];
     return {
-      text: text,
+      text: domainName,
       startTime: 0
     };
   }
@@ -61,6 +62,14 @@ class BookmarkTracer {
     for (let item of historyItems) {
       return new Date(item.lastVisitTime);
     }
+  }
+
+  // 移動対象か
+  isMoveTarget(bookmarkItem)
+  {
+    var dt = new Date();
+    dt.setMonth(dt.getMonth() - monthAgo);
+    return (bookmarkItem.type != "folder" && dt > bookmarkItem.lastVisitTime) ? true : false;
   }
 
   // ログを表示
@@ -89,8 +98,7 @@ function createAlarm()
 {
   console.log("createAlarm");
   browser.alarms.clearAll();
-  var millisecond = Date.parse("2017-11-14 07:13:00")
-  browser.alarms.create("", {when: millisecond});
+  browser.alarms.create("", {delayInMinutes: DELAY})
 }
 
 // アラーム動作
