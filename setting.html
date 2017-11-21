@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../styles/setting.css"/>
+  </head>
+
+  <body>
+    <form class="setting">
+        <p>設定値</p>
+        <hr color="#dcdcdc" size="1">
+          <div>
+            <div class="setting_item">
+              <p>
+                現在から何ヶ月経過したブックマークを対象とするか：
+                <select id="elapsed_month"><option value="0">--</option></select>ヶ月
+              </p>
+            </div>
+            <div class="setting_item">
+              <p>
+                実行スケジュール：<input type="time" id="execution_time">
+              </p>
+            </div>
+            <button type="submit">保存</button>
+          </div>
+    </form>
+  </body>
+  <script src="../scripts/setting.js" type="text/javascript"></script>
+</html>
