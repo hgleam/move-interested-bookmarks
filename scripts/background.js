@@ -1,6 +1,6 @@
 var DELAY = 0.1;
 var savingFolderId = 'SY7AkDMjYZ7V';    // 退避先のフォルダID
-var monthAgo = 2;                       // 退避対象ブックマークを2ヶ月未読のものと決めうちで確認
+var monthAgo = 2;                       // 退避対象ブックマークのデフォルト設定値
 
 // ブックマーク走査
 class BookmarkTracer {
@@ -98,7 +98,24 @@ function createAlarm()
 {
   console.log("createAlarm");
   browser.alarms.clearAll();
-  browser.alarms.create("", {delayInMinutes: DELAY})
+
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth() + 1;
+  var day = today.getDate();
+
+  browser.storage.local.get(["elapsed_month", "execution_time"], options =>
+  {
+      monthAgo = options.elapsed_month;
+      execution_time = options.execution_time;
+
+      var executionDate = year + "-" + month + "-" + day + " " + execution_time;
+      var epochMilliseconds = Date.parse(executionDate);
+
+      browser.alarms.create("", {
+        when: epochMilliseconds,
+        periodInMinutes: 60 * 24});
+  });
 }
 
 // アラーム動作

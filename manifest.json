@@ -10,14 +10,20 @@
   "permissions": [
     "alarms",
     "bookmarks",
-    "history"
+    "history",
+    "storage"
   ],
 
   "page_action": {
     "default_title": "evacuate-unnecessary-bookmarks"
   },
 
+  "options_ui": {
+    "page": "./setting.html",
+    "open_in_tab": false
+  },
+
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["./scripts/background.js"]
   }
 }
