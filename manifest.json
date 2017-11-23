@@ -24,6 +24,10 @@
   },
 
   "background": {
-    "scripts": ["./scripts/background.js"]
+    "scripts": ["./scripts/background.js",
+                "./scripts/bookmark_tracer.js",
+                "./scripts/extension_bookmark_item.js",
+                "./scripts/formatter.js"
+              ]
   }
 }
