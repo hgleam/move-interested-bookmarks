@@ -29,6 +29,7 @@
                 "./scripts/background.js",
                 "./scripts/bookmark_tracer.js",
                 "./scripts/extension_bookmark_item.js",
+                "./scripts/extension_history.js",
                 "./scripts/formatter.js"
               ]
   },
