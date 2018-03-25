@@ -1,30 +1,13 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../styles/setting.css"/>
+    <script src="/scripts/vue.js"></script>
+    <script src="/scripts/lodash_min.js"></script>
+    <title>evacuate-unnecessary-bookmarks</title>
   </head>
-
   <body>
-    <form class="setting">
-        <p>設定値</p>
-        <hr color="#dcdcdc" size="1">
-          <div>
-            <div class="setting_item">
-              <p>
-                現在から何ヶ月経過したブックマークを対象とするか：
-                <select id="elapsed_month"><option value="0">--</option></select>ヶ月
-              </p>
-            </div>
-            <div class="setting_item">
-              <p>
-                実行スケジュール：<input type="time" id="execution_time">
-              </p>
-            </div>
-            <button type="submit">保存</button>
-          </div>
-    </form>
+    <div id="app"></div>
+    <script src="/dist/build.js"></script>
   </body>
-  <script src="../scripts/setting.js" type="text/javascript"></script>
 </html>
