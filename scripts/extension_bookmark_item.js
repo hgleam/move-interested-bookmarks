@@ -11,12 +11,11 @@ class ExtensionBookmarkItem
   {
     return new Promise((resolve, reject) => {
       if (this.item.title != '') {
-        var searching = browser.history.search(this.createLogSearchCriteria());
-        searching.then(this.haveGot)
-        .then((lastVisitTime) => {
-          this.item.lastVisitTime = lastVisitTime;
-          resolve(this);
-        });
+        let extensionHistory = new ExtensionHistory(this.item)
+        extensionHistory.searchResult()
+        .then((result) => {
+          resolve(result)
+        })
       }
 
       if (this.item.children) {
@@ -27,32 +26,11 @@ class ExtensionBookmarkItem
         this.indent--;
       }
     }).then((value) => {
-      if (value.isMoveTarget()) {
+      if (this.isMoveTarget()) {
         var movingBookmark = browser.bookmarks.move(value.item.id, {parentId: savingFolderId})
       }
       new Formatter(value).output();
     });
-  }
-
-  // 履歴検索条件の生成
-  // URLを持っている場合はURLを条件、持っていない場合はタイトルを条件とする
-  createLogSearchCriteria()
-  {
-    var domainName = this.item.url == undefined
-                   ? this.item.title
-                   : this.item.url.match(/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/i)[4];
-    return {
-      text: domainName,
-      startTime: 0
-    };
-  }
-
-  // 履歴の取得
-  haveGot(historyItems)
-  {
-    for (let item of historyItems) {
-      return new Date(item.lastVisitTime);
-    }
   }
 
   // 移動対象か
