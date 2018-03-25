@@ -1,48 +1,87 @@
-// オプションの保存
-function saveOptions(event)
-{
-  event.preventDefault();
-  browser.storage.local.set(
-    {
-      execution_time: document.querySelector('#execution_time').value,
-      elapsed_month: document.querySelector('#elapsed_month').value
+"use strict";
+
+import Notificator from './notificator';
+
+export default class {
+  constructor()
+  {
+    this.elapsedMonthChanged = new Notificator;
+    this.executionTimeChanged = new Notificator;
+    this.exclusionDomainsChanged = new Notificator;
+
+    this.elapsedMonth = {};
+    this.executionTime = {};
+    this.exclusionDomains = [];
+  }
+  set elapsedMonth(x) {
+    this._elapsedMonth = x;
+    this.elapsedMonthChanged.fire();
+  }
+
+  get elapsedMonth() {
+    return this._elapsedMonth;
+  }
+
+  set executionTime(x) {
+    this._executionTime = x;
+    this.executionTimeChanged.fire();
+  }
+
+  get executionTime() {
+    return this._executionTime;
+  }
+
+  set exclusionDomains(x) {
+    this._exclusionDomains = x;
+    this.exclusionDomainsChanged.fire();
+  }
+
+  get exclusionDomains() {
+    return this._exclusionDomains;
+  }
+
+  changeElapsedMonth(i) {
+    this.elapsedMonth = i;
+  }
+
+  changeExecutionTime(i) {
+    this.executionTime = i;
+  }
+
+  changeExclusiondomains(i) {
+    this.exclusionDomains = i;
+  }
+
+  addExclusionDomains(i) {
+    this.exclusionDomains.push({
+      text: i
+    });
+  }
+
+  removeExclusionDomains(i) {
+    this.exclusionDomains.splice(i, 1);
+  }
+
+  restore() {
+    let value = JSON.parse(localStorage.getItem('setting')) || {};
+    if(Object.keys(value).length != 0) {
+      this.elapsedMonth = value.elapsedMonth;
+      this.executionTime = value.executionTime;
+      this.exclusionDomains = value.exclusionDomains;
     }
+  }
 
-  )
+  save() {
+    let value = {
+      elapsedMonth: this.elapsedMonth,
+      executionTime: this.executionTime,
+      exclusionDomains: this.exclusionDomains
+    };
+
+    localStorage.setItem('setting', JSON.stringify(value));
+
+    // バックグラウンド起動時間の更新
+    let page = browser.extension.getBackgroundPage();
+    page.createAlarm();
+  }
 }
-
-// オプションの復元
-function restoreOptions()
-{
-  function setCurrentChoice(result)
-  {
-    document.querySelector("#execution_time").value = result.execution_time;
-    document.querySelector("#elapsed_month").value = result.elapsed_month;
-  }
-
-  function onError(error)
-  {
-    console.log(`Error: ${error}`);
-  }
-
-  // 未読経過月設定用のセレクトボックスを生成
-  function createErapsedMonth()
-  {
-    var $elapsedMonth = document.querySelector('#elapsed_month');
-    for (var i = 1; i <= 12; i++) {
-      var $option = document.createElement('option');
-      $option.setAttribute('value', i);
-      $option.innerHTML = i;
-      $elapsedMonth.appendChild($option);
-    }
-  }
-
-  // 未読経過月設定用のセレクトボックスを生成
-  createErapsedMonth();
-
-  var getting = browser.storage.local.get();
-  getting.then(setCurrentChoice, onError);
-}
-
-document.addEventListener("DOMContentLoaded", restoreOptions);
-document.querySelector("form").addEventListener("submit", saveOptions);
