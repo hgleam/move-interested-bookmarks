@@ -9,6 +9,7 @@ class ExtensionHistory {
     return new Promise((resolve, reject) => {
       let searching = browser.history.search({text: this.query.text,
                                               startTime: this.query.startTime})
+      console.log(searching)
       searching.then(this.haveGot)
       .then((lastVisitTime) => {
         this.item.lastVisitTime = lastVisitTime
@@ -32,10 +33,19 @@ class ExtensionHistory {
     let domainName = this.item.url == undefined
                    ? this.item.title
                    : this.item.url.match(/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/i)[4];
+    if (this.isDomainJudgementNonTarget(domainName)) {
+      domainName = this.item.url
+    }
 
     return {
       text: domainName,
       startTime: 0
     };
+  }
+
+  // ドメイン判断対象外であるか
+  isDomainJudgementNonTarget(url) {
+    let setting = JSON.parse(localStorage.getItem('setting')) || {}
+    return _.find(setting.exclusionDomains, function(object) { return object.text == url })
   }
 }
