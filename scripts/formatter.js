@@ -3,7 +3,7 @@ class Formatter
   constructor(value)
   {
     this.item = value.item;
-    this.indent = value.indent;
+    this.whatTier = value.whatTier;
   }
 
   // 出力
@@ -21,6 +21,6 @@ class Formatter
   // インデントを追加
   appendIndent()
   {
-    return " ".repeat(this.indent);
+    return " ".repeat(this.whatTier);
   }
 }
