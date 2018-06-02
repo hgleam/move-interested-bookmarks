@@ -1,29 +1,29 @@
 class ExtensionBookmarkItem
 {
-  constructor(item, indent)
+  constructor(item)
   {
       this.item = item;
-      this.indent = indent;
   }
 
   // 走査
-  trace()
+  trace(whatTier)
   {
     return new Promise((resolve, reject) => {
       if (this.item.title != '') {
         let extensionHistory = new ExtensionHistory(this.item)
         extensionHistory.searchResult()
         .then((result) => {
+          result.whatTier = whatTier
           resolve(result)
         })
       }
 
       if (this.item.children) {
-        if (this.item.title) this.indent++;
+        if (this.item.title) whatTier++;
         for (let childlen of this.item.children) {
-          new ExtensionBookmarkItem(childlen, this.indent).trace();
+          new ExtensionBookmarkItem(childlen).trace(whatTier);
         }
-        this.indent--;
+        whatTier--;
       }
     }).then((value) => {
       if (this.isMoveTarget()) {
