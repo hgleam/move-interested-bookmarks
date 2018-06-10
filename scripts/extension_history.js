@@ -9,7 +9,6 @@ class ExtensionHistory {
     return new Promise((resolve, reject) => {
       let searching = browser.history.search({text: this.query.text,
                                               startTime: this.query.startTime})
-      console.log(searching)
       searching.then(this.haveGot)
       .then((lastVisitTime) => {
         this.item.lastVisitTime = lastVisitTime

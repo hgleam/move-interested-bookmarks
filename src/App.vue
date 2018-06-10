@@ -2,16 +2,24 @@
 	<div id="app">
 		<h1>設定値</h1>
 			<div class="app-main">
+				<save-destination-folder :matchingBookmarkFolders="matchingBookmarkFolders" :value="saveDestinationFolder"
+					@searchBookmark="searchBookmark"
+					@changeSaveDestinationFolder="changeSaveDestinationFolder">
+				</save-destination-folder>
 				<elapsed-month :value="elapsedMonth" @changeElapsedMonth="changeElapsedMonth"></elapsed-month>
 				<execution-time :value="executionTime" @changeExecutionTime="changeExecutionTime"></execution-time>
 				<exclusion-domains :values="exclusionDomains" @addExclusionDomains="addExclusionDomains"
 																										  @removeExclusionDomains="removeExclusionDomains"></exclusion-domains>
 				<button type="submit" @click="save">保存</button>
 		</div>
+		<div id="tree">
+		</div>
 	</div>
+
 </template>
 
 <script>
+	import SaveDestinationFolder from './components/SaveDestinationFolder'
 	import ElapsedMonth from './components/ElapsedMonth';
 	import ExecutionTime from './components/ExecutionTime';
 	import ExclusionDomains from './components/ExclusionDomains';
@@ -19,15 +27,18 @@
 
 	export default {
 		components: {
+			SaveDestinationFolder,
 			ElapsedMonth,
 			ExecutionTime,
 			ExclusionDomains,
 		},
 		data() {
 			return {
+				saveDestinationFolder: this.model.saveDestinationFolder,
+				matchingBookmarkFolders: this.model.matchingBookmarkFolders,
 				elapsedMonth: this.model.elapsedMonth,
 				executionTime: this.model.executionTime,
-				exclusionDomains: this.model.exclusionDomains
+				exclusionDomains: this.model.exclusionDomains,
 			}
 		},
 		beforeCreate() {
@@ -35,6 +46,12 @@
 	 		this.model.restore();
 		},
 		mounted() {
+			this.model.saveDestinationFolderChanged.observe(() => {
+				this.saveDestinationFolder = this.model.saveDestinationFolder;
+			})
+			this.model.searchFoldersChanged.observe(() => {
+				this.matchingBookmarkFolders = this.model.matchingBookmarkFolders;
+			})
 	  	this.model.elapsedMonthChanged.observe(() => {
 				this.elapsedMonth = this.model.elapsedMonth;
 			})
@@ -56,12 +73,17 @@
 				this.model.addExclusionDomains(value);
 			},
 			removeExclusionDomains(value) {
-				console.log(value.text);
 				this.model.removeExclusionDomains(value);
 			},
-		  save() {
+			searchBookmark(value) {
+				this.model.searchBookmark(value);
+			},
+			changeSaveDestinationFolder(value) {
+				this.model.changeSaveDestinationFolder(value)
+			},
+			save() {
 				this.model.save();
-		  },
+			},
 		},
 	};
 </script>
