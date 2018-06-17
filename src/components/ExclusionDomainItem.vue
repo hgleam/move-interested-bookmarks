@@ -22,7 +22,7 @@
   }
 </script>
 
-<style lang="css">
+<style scoped lang="css">
   li {
     list-style: none;
     height: 28px;
