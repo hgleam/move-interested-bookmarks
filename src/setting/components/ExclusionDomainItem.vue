@@ -1,25 +1,27 @@
 <template>
   <li>
     <span>{{ exclusionDomain.text }}</span>
-    <button class="delete-button" @click="remove(exclusionDomain)">削除</button>
+    <button
+      class="delete-button"
+      @click="remove(exclusionDomain)">削除
+    </button>
   </li>
 </template>
 
 <script>
-
-  export default {
-    props: {
-      exclusionDomain: {
-        type: Object,
-        required: true
-      }
-    },
-    methods: {
-      remove(value) {
-        this.$emit('removeExclusionDomain', value);
-      },
-    },
+export default {
+  props: {
+    exclusionDomain: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    remove(value) {
+      this.$emit('removeExclusionDomain', value)
+    }
   }
+}
 </script>
 
 <style scoped lang="css">

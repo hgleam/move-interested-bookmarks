@@ -9,21 +9,39 @@
       style="width:130px"
       placeholder="退避先フォルダ"
     >
-    <button class="delete-button" @click="openDialog">選択</button>
+    <button
+      class="delete-button"
+      @click="openDialog">選択
+    </button>
 
-    <div id="dialog" role="dialog" aria-labelledby="dialog-title" aria-hidden="true">
+    <div
+      id="dialog"
+      role="dialog"
+      aria-labelledby="dialog-title"
+      aria-hidden="true"
+    >
       <header>
         <h3 id="dialog-title">退避先フォルダ選択</h3>
       </header>
-      <input type="text" id="folderInput" v-model="searchWord" placeholder="Search folder..." @keyup="search($event)">
-      <div id="folderList" class="folder-list">
+      <input
+        type="text"
+        id="folderInput"
+        v-model="searchWord"
+        placeholder="Search folder..."
+        @keyup="search($event)"
+      >
+      <div
+        id="folderList"
+        class="folder-list">
         <div v-if="!matchingBookmarkFolders.length">
           一致するフォルダがありません
         </div>
-        <div v-else v-for="matchingBookmarkFolder in matchingBookmarkFolders"
-             class="folder"
-             :key="matchingBookmarkFolder.id"
-             @click="changeSaveDestinationFolder(matchingBookmarkFolder)">
+        <div
+          v-else
+          v-for="matchingBookmarkFolder in matchingBookmarkFolders"
+          class="folder"
+          :key="matchingBookmarkFolder.id"
+          @click="changeSaveDestinationFolder(matchingBookmarkFolder)">
           <span class="icon"/>
           <div class="title">{{ matchingBookmarkFolder.title }}</div>
         </div>
@@ -34,43 +52,53 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        searchWord: '',
-        saveDestinationFolder: ''
-      };
-    },
-    mounted() {
-      this.saveDestinationFolder = this.value;
-    },
-    props: [
-      'value',
-      'matchingBookmarkFolders',
-    ],
-    methods: {
-      openDialog() {
-        $(this).blur();
-        $("#dialog-overlay" ).fadeIn("slow") ;
-        let dialog = document.getElementById('dialog');
-        dialog.setAttribute("aria-hidden", false);
-        dialog.style.display = 'flex';
+import $ from 'jquery'
 
-        $("#dialog-overlay").unbind().click(function() {
-		      $("#dialog").fadeOut("slow", function() {
-			      $('#dialog-overlay').css('display', 'none');
-		      });
-	      });
-      },
-      changeSaveDestinationFolder(value) {
-        this.saveDestinationFolder = value;
-        this.$emit('changeSaveDestinationFolder', value);
-      },
-      search(event) {
-        this.$emit('searchBookmark', this.searchWord);
-      },
+export default {
+  props: {
+    value: {
+      type: String,
+      required: true
     },
+    matchingBookmarkFolders: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      searchWord: '',
+      saveDestinationFolder: ''
+    }
+  },
+  mounted() {
+    this.saveDestinationFolder = this.value
+  },
+  methods: {
+    openDialog() {
+      $(this).blur()
+      $('#dialog-overlay').fadeIn('slow')
+      let dialog = document.getElementById('dialog')
+      dialog.setAttribute('aria-hidden', false)
+      dialog.style.display = 'flex'
+
+      $('#dialog-overlay')
+        .unbind()
+        .click(function() {
+          $('#dialog').fadeOut('slow', function() {
+            $('#dialog-overlay').css('display', 'none')
+          })
+        })
+    },
+    changeSaveDestinationFolder(value) {
+      this.saveDestinationFolder = value
+      this.$emit('changeSaveDestinationFolder', value)
+    },
+    search() {
+      this.$emit('searchBookmark', this.searchWord)
+    }
   }
+}
 </script>
 
 <style scoped lang="css">
