@@ -18,25 +18,30 @@
 </template>
 
 <script>
-  import InputExclusionDomain from './InputExclusionDomain';
-  import ExclusionDomainItem from './ExclusionDomainItem';
+import InputExclusionDomain from './InputExclusionDomain.vue'
+import ExclusionDomainItem from './ExclusionDomainItem.vue'
 
-  export default {
-    components: {
-      InputExclusionDomain,
-      ExclusionDomainItem,
+export default {
+  components: {
+    InputExclusionDomain,
+    ExclusionDomainItem
+  },
+  props: {
+    values: {
+      type: Array,
+      required: true
+    }
+  },
+  methods: {
+    add(value) {
+      this.$emit('addExclusionDomains', value)
     },
-    props: ['values'],
-    methods: {
-      add(value) {
-        this.$emit('addExclusionDomains', value);
-      },
-      remove(value) {
-        const index = this.values.indexOf(value);
-        this.$emit('removeExclusionDomains', index);
-      },
-    },
+    remove(value) {
+      const index = this.values.indexOf(value)
+      this.$emit('removeExclusionDomains', index)
+    }
   }
+}
 </script>
 
 <style lang="css">

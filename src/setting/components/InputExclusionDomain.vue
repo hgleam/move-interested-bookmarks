@@ -10,22 +10,23 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        newExclusionDomainText: ''
-      };
-    },
-    methods: {
-      add() {
-        const value = this.newExclusionDomainText && this.newExclusionDomainText.trim();
-        if (value) {
-          this.$emit('addExclusionDomain', value);
-          this.newExclusionDomainText = '';
-        }
-      },
-    },
+export default {
+  data() {
+    return {
+      newExclusionDomainText: ''
+    }
+  },
+  methods: {
+    add() {
+      const value =
+        this.newExclusionDomainText && this.newExclusionDomainText.trim()
+      if (value) {
+        this.$emit('addExclusionDomain', value)
+        this.newExclusionDomainText = ''
+      }
+    }
   }
+}
 </script>
 
 <style lang="css">
