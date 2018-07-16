@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "evacuate-unnecessary-bookmarks",
+  "name": "move-interested-bookmarks",
   "version": "1.0",
   "description": "不要になったブックマークを退避するWebExtension",
   "homepage_url": "https://github.com/wild7/evacuate-unnecessary-bookmarks",

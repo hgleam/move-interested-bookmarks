@@ -1,6 +1,6 @@
 {
-  "name": "evacuate-unnecessary-bookmarks",
-  "description": "A Vue.js project",
+  "name": "move-interested-bookmarks",
+  "description": "不要になったブックマークを退避するアドオン",
   "version": "1.0.0",
   "author": "wild7",
   "license": "MIT",
