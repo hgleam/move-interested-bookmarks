@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "move-interested-bookmarks",
+  "version": "1.0",
+  "description": "不要になったブックマークを退避するWebExtension",
+  "homepage_url": "https://github.com/wild7/evacuate-unnecessary-bookmarks",
+  "icons": {},
+
+  "permissions": ["alarms", "bookmarks", "history", "storage"],
+
+  "page_action": {
+    "default_title": "evacuate-unnecessary-bookmarks"
+  },
+
+  "options_ui": {
+    "page": "./dist/src/static/setting/index.html",
+    "open_in_tab": true
+  },
+
+  "background": {
+    "page": "./dist/src/static/background/index.html"
+  },
+  "content_security_policy":
+    "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
